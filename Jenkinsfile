@@ -2,21 +2,19 @@ pipeline {
     agent any
 
     stages {
-        stage('Clone') {
+        stage('Build Docker Image') {
             steps {
-                echo 'Code pulled from GitHub'
+                sh 'docker build -t ci-cd-demo .'
             }
         }
 
-        stage('Install') {
+        stage('Run Container') {
             steps {
-                sh 'npm install'
-            }
-        }
-
-        stage('Run App') {
-            steps {
-                sh 'node app.js &'
+                sh '''
+                docker stop app || true
+                docker rm app || true
+                docker run -d -p 3000:3000 --name app ci-cd-demo
+                '''
             }
         }
     }
