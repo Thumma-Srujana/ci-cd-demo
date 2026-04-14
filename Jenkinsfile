@@ -1,9 +1,22 @@
 pipeline {
     agent any
+
     stages {
-        stage('Build') {
+        stage('Clone') {
             steps {
-                echo 'Building...'
+                echo 'Code pulled from GitHub'
+            }
+        }
+
+        stage('Install') {
+            steps {
+                sh 'npm install'
+            }
+        }
+
+        stage('Run App') {
+            steps {
+                sh 'node app.js &'
             }
         }
     }
